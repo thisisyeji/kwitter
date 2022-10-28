@@ -90,7 +90,7 @@ const AuthForm = () => {
 						type='password'
 						name='password2'
 						value={password2}
-						placeholder='비밀번호를 재 입력하세요'
+						placeholder='비밀번호를 재입력하세요'
 						required
 						onChange={onChange}
 					/>
