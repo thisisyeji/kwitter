@@ -4,16 +4,19 @@ import { dbService } from 'fbase';
 
 const Write = ({ userObj }) => {
 	const [kweet, setKweet] = useState('');
+	const [active, setActive] = useState('');
 
 	const onChange = (e) => {
 		const {
 			target: { value },
 		} = e;
 		setKweet(value);
+		setActive(value);
 	};
 
 	const onSubmit = async (e) => {
 		e.preventDefault();
+
 		const options = {
 			year: 'numeric',
 			month: 'long',
@@ -28,9 +31,10 @@ const Write = ({ userObj }) => {
 			createdDate: createdDate,
 			creatorId: userObj.uid,
 			creatorName: userObj.displayName,
-			profile: userObj.photoURL,
+			profileImg: userObj.photoURL,
 		});
 		setKweet('');
+		setActive('');
 	};
 
 	return (
@@ -42,7 +46,7 @@ const Write = ({ userObj }) => {
 				value={kweet}
 				onChange={onChange}
 			/>
-			<input type='submit' value='크윗하기' />
+			<input type='submit' value='크윗하기' disabled={!active} />
 		</form>
 	);
 };
