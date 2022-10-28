@@ -1,12 +1,30 @@
 import Routers from 'components/Routers';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { authService } from 'fbase';
+import { onAuthStateChanged } from 'firebase/auth';
 
 function App() {
-	const [isLoggedIn, setIsLoggedIn] = useState(authService.currentUser);
+	const [init, setInit] = useState(false);
+	const [isLoggedIn, setIsLoggedIn] = useState(false);
+	useEffect(() => {
+		onAuthStateChanged(authService, (user) => {
+			if (user) {
+				setIsLoggedIn(true);
+				// displayName 받아올 수 있도록 수정
+				if (user.displayName === null) {
+					const name = user.email.split('@')[0];
+					user.displayName = name;
+				}
+			} else {
+				setIsLoggedIn(false);
+			}
+			setInit(true);
+		});
+	}, []);
+
 	return (
 		<>
-			<Routers isLoggedIn={isLoggedIn} />
+			{init ? <Routers isLoggedIn={isLoggedIn} /> : 'Initializing...'}
 			<footer></footer>
 		</>
 	);
