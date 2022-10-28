@@ -1,4 +1,6 @@
 import React, { useState } from 'react';
+import { collection, addDoc } from 'firebase/firestore';
+import { dbService } from 'fbase';
 
 const Write = () => {
 	const [kweet, setKweet] = useState('');
@@ -9,8 +11,14 @@ const Write = () => {
 		} = e;
 		setKweet(value);
 	};
-	const onSubmit = (e) => {
+	const onSubmit = async (e) => {
 		e.preventDefault();
+		await addDoc(collection(dbService, 'kweets'), {
+			kweet,
+			createdAt: Date.now(),
+			date: new Date(Date.now()),
+		});
+		setKweet('');
 	};
 	return (
 		<form onSubmit={onSubmit}>
