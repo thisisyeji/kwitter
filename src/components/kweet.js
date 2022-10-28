@@ -1,7 +1,14 @@
 import React from 'react';
 
-const kweet = () => {
-	return <div>kweet</div>;
+const Kweet = ({ kweetObj }) => {
+	return (
+		<div>
+			<img src={kweetObj.profile} alt='userImage' />
+			<h4>{kweetObj.text}</h4>
+			<p>{kweetObj.creatorName}</p>
+			<span>{kweetObj.createdDate}</span>
+		</div>
+	);
 };
 
-export default kweet;
+export default Kweet;

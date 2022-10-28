@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { collection, query, orderBy, onSnapshot } from 'firebase/firestore';
 import { dbService } from 'fbase';
 import Write from '../components/Write';
+import Kweet from '../components/Kweet';
 
 const Home = ({ userObj }) => {
 	const [kweets, setKweets] = useState([]);
@@ -25,11 +26,7 @@ const Home = ({ userObj }) => {
 			<Write userObj={userObj} />
 			<div>
 				{kweets.map((kweet) => (
-					<div key={kweet.id}>
-						<h4>{kweet.text}</h4>
-						<p>{kweet.creatorName}</p>
-						<span>{kweet.createdDate}</span>
-					</div>
+					<Kweet key={kweet.id} kweetObj={kweet} />
 				))}
 			</div>
 		</div>

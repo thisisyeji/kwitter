@@ -28,6 +28,7 @@ const Write = ({ userObj }) => {
 			createdDate: createdDate,
 			creatorId: userObj.uid,
 			creatorName: userObj.displayName,
+			profile: userObj.photoURL,
 		});
 		setKweet('');
 	};
