@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { collection, addDoc } from 'firebase/firestore';
 import { dbService } from 'fbase';
 
-const Write = () => {
+const Write = ({ userObj }) => {
 	const [kweet, setKweet] = useState('');
 
 	const onChange = (e) => {
@@ -11,15 +11,27 @@ const Write = () => {
 		} = e;
 		setKweet(value);
 	};
+
 	const onSubmit = async (e) => {
 		e.preventDefault();
+		const options = {
+			year: 'numeric',
+			month: 'long',
+			day: 'numeric',
+			hour: 'numeric',
+			minute: 'numeric',
+		};
+		let createdDate = new Date().toLocaleString('ko-KR', options);
 		await addDoc(collection(dbService, 'kweets'), {
-			kweet,
+			text: kweet,
 			createdAt: Date.now(),
-			date: new Date(Date.now()),
+			createdDate: createdDate,
+			creatorId: userObj.uid,
+			creatorName: userObj.displayName,
 		});
 		setKweet('');
 	};
+
 	return (
 		<form onSubmit={onSubmit}>
 			<input

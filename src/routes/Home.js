@@ -3,7 +3,7 @@ import { collection, query, orderBy, onSnapshot } from 'firebase/firestore';
 import { dbService } from 'fbase';
 import Write from '../components/Write';
 
-const Home = () => {
+const Home = ({ userObj }) => {
 	const [kweets, setKweets] = useState([]);
 
 	useEffect(() => {
@@ -22,11 +22,13 @@ const Home = () => {
 
 	return (
 		<div>
-			<Write />
+			<Write userObj={userObj} />
 			<div>
 				{kweets.map((kweet) => (
 					<div key={kweet.id}>
-						<h4>{kweet.kweet}</h4>
+						<h4>{kweet.text}</h4>
+						<p>{kweet.creatorName}</p>
+						<span>{kweet.createdDate}</span>
 					</div>
 				))}
 			</div>
