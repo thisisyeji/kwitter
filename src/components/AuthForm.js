@@ -95,7 +95,7 @@ const AuthForm = () => {
 						onChange={onChange}
 					/>
 				)}
-				<button type='submit'>{newMember ? '가입하기' : '로그인'}</button>
+				<input type='submit' value={newMember ? '가입하기' : '로그인'} />
 				<p>{error}</p>
 			</form>
 			<div>

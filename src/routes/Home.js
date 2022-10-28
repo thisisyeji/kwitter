@@ -1,7 +1,12 @@
-import React from 'react';
+import React, { useState } from 'react';
+import Write from '../components/Write';
 
 const Home = () => {
-	return <div>Home</div>;
+	return (
+		<div>
+			<Write />
+		</div>
+	);
 };
 
 export default Home;
