@@ -13,7 +13,11 @@ const Routers = ({ isLoggedIn, userObj }) => {
 				{isLoggedIn ? (
 					<>
 						<Route exact path='/' render={() => <Home userObj={userObj} />} />
-						<Route exact path='/profile' component={Profile} />
+						<Route
+							exact
+							path='/profile'
+							render={() => <Profile userObj={userObj} />}
+						/>
 					</>
 				) : (
 					<Route exact path='/' component={Auth} />
