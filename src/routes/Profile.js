@@ -10,6 +10,12 @@ import {
 	onSnapshot,
 	getDoc,
 } from 'firebase/firestore';
+import styled from 'styled-components';
+
+const Wrapper = styled.section`
+	margin-top: 50px;
+	margin-left: 30vw;
+`;
 
 const Profile = () => {
 	const history = useHistory();
@@ -21,9 +27,9 @@ const Profile = () => {
 		history.push('/');
 	};
 	return (
-		<>
+		<Wrapper>
 			<button onClick={onLogOutClick}>로그아웃</button>
-		</>
+		</Wrapper>
 	);
 };
 

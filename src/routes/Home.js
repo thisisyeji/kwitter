@@ -3,6 +3,12 @@ import { collection, query, orderBy, onSnapshot } from 'firebase/firestore';
 import { dbService } from 'fbase';
 import Write from 'components/Write';
 import Kweet from 'components/Kweet';
+import styled from 'styled-components';
+
+const Wrapper = styled.section`
+	margin-top: 50px;
+	margin-left: 30vw;
+`;
 
 const Home = ({ userObj }) => {
 	const [kweets, setKweets] = useState([]);
@@ -22,7 +28,7 @@ const Home = ({ userObj }) => {
 	}, []);
 
 	return (
-		<div>
+		<Wrapper>
 			<Write userObj={userObj} />
 			<div>
 				{kweets.map((kweet) => (
@@ -33,7 +39,7 @@ const Home = ({ userObj }) => {
 					/>
 				))}
 			</div>
-		</div>
+		</Wrapper>
 	);
 };
 

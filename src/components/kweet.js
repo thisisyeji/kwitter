@@ -1,17 +1,22 @@
 import React, { useState } from 'react';
 import { doc, deleteDoc, updateDoc } from 'firebase/firestore';
 import { dbService } from 'fbase';
+import { storageService } from 'fbase';
+import { deleteObject, ref } from 'firebase/storage';
 
 const Kweet = ({ kweetObj, isOwner }) => {
 	const [editing, setEditing] = useState(false);
 	const [newKweet, setNewKweet] = useState(kweetObj.text);
 
-	const kweetRef = doc(dbService, 'kweets', `${kweetObj.id}`);
+	const kweetTextRef = doc(dbService, 'kweets', `${kweetObj.id}`);
 
 	const onDeleteClick = async () => {
 		const confirmCheck = window.confirm('트윗을 삭제할까요?');
 		if (confirmCheck) {
-			await deleteDoc(kweetRef);
+			await deleteDoc(kweetTextRef);
+			if (kweetObj.attachmentUrl) {
+				await deleteObject(ref(storageService, kweetObj.attachmentUrl));
+			}
 		}
 	};
 
@@ -23,7 +28,7 @@ const Kweet = ({ kweetObj, isOwner }) => {
 		e.preventDefault();
 		if (!newKweet) return alert('수정할 내용을 입력하세요.');
 
-		await updateDoc(kweetRef, {
+		await updateDoc(kweetTextRef, {
 			text: newKweet,
 		});
 		setEditing(false);
@@ -38,7 +43,6 @@ const Kweet = ({ kweetObj, isOwner }) => {
 
 	return (
 		<div>
-			<img src={kweetObj.profileImg} alt='userImage' />
 			{editing ? (
 				<>
 					<form onSubmit={onSubmit}>
@@ -48,18 +52,29 @@ const Kweet = ({ kweetObj, isOwner }) => {
 					<button onClick={toggleEditing}>취소</button>
 				</>
 			) : (
-				<h4>{kweetObj.text}</h4>
-			)}
+				<>
+					{kweetObj.attachmentUrl && (
+						<img
+							src={kweetObj.attachmentUrl}
+							alt='uploaded img'
+							width='200px'
+							height='200px'
+						/>
+					)}
+					<h4>{kweetObj.text}</h4>
 
-			{isOwner && (
-				<div>
-					<button onClick={onDeleteClick}>삭제하기</button>
-					<button onClick={toggleEditing}>수정하기</button>
-				</div>
-			)}
+					<img src={kweetObj.profileImg} alt='userImage' />
+					<p>{kweetObj.creatorName}</p>
+					<span>{kweetObj.createdDate}</span>
 
-			<p>{kweetObj.creatorName}</p>
-			<span>{kweetObj.createdDate}</span>
+					{isOwner && (
+						<div>
+							<button onClick={toggleEditing}>수정하기</button>
+							<button onClick={onDeleteClick}>삭제하기</button>
+						</div>
+					)}
+				</>
+			)}
 		</div>
 	);
 };
