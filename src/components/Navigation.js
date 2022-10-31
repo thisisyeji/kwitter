@@ -8,8 +8,11 @@ const Nav = styled.nav`
 	width: 30vw;
 	height: 100vh;
 	position: fixed;
+	top: 0;
 	background: #fff;
 	border-right: 1px solid #efefef;
+	padding-top: 30px;
+	z-index: 3;
 
 	ul {
 		margin-left: 10vw;
