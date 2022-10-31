@@ -32,7 +32,7 @@ const AuthWrap = styled.section`
 	.right {
 		width: 50%;
 		height: 100%;
-		margin: 0 50px;
+		padding: 0 50px;
 
 		display: flex;
 		flex-direction: column;

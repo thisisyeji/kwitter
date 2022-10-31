@@ -93,12 +93,13 @@ const SubmitInput = styled.input`
 	&:enabled {
 		color: #fff;
 		background: rgb(29, 155, 240);
-		border: 1px solid none;
+		border: none;
 	}
 
 	&:hover {
 		background: rgb(29, 134, 201);
 		color: #fff;
+		border: none;
 	}
 `;
 
