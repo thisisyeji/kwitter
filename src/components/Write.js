@@ -137,7 +137,7 @@ const Write = ({ userObj }) => {
 		const {
 			target: { value },
 		} = e;
-		setKweet(value);
+		setKweet(value.trim());
 		setActive(value);
 	};
 

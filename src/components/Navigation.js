@@ -5,7 +5,7 @@ import { BsFillPersonFill } from 'react-icons/bs';
 import styled from 'styled-components';
 
 const Nav = styled.nav`
-	width: 30vw;
+	width: 25vw;
 	height: 100vh;
 	position: fixed;
 	top: 0;
@@ -15,7 +15,7 @@ const Nav = styled.nav`
 	z-index: 3;
 
 	ul {
-		margin-left: 10vw;
+		margin-left: 7vw;
 	}
 `;
 
@@ -25,6 +25,7 @@ const List = styled.li`
 	color: rgb(15, 20, 25);
 	border-radius: 30px;
 	cursor: pointer;
+	margin-right: 20px;
 	margin-bottom: 20px;
 	padding: 12px;
 	transition: 0.5s;

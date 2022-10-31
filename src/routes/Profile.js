@@ -10,7 +10,7 @@ import Kweet from '../components/Kweet';
 
 const Wrapper = styled.section`
 	border-right: 1px solid #efefef;
-	margin: 0 20vw 0 30vw;
+	margin: 0 20vw 0 25vw;
 	margin-top: 50px;
 `;
 
@@ -66,8 +66,8 @@ const UserProfile = styled.div`
 
 	.btns {
 		position: absolute;
-		top: 30px;
-		right: 10px;
+		top: 50px;
+		right: 20px;
 
 		display: flex;
 		flex-direction: column;
@@ -92,6 +92,7 @@ const UserProfile = styled.div`
 `;
 
 const EditForm = styled.form`
+	max-width: 500px;
 	border: 1px solid #e4e4e4;
 	border-radius: 10px;
 	padding: 20px;
@@ -135,6 +136,7 @@ const Profile = ({ refreshUser, userObj }) => {
 	const [myKweets, setMyKweets] = useState([]);
 	const [newName, setNewName] = useState(userObj.displayName);
 	const [edit, setEdit] = useState(false);
+	const [loading, setLoading] = useState(false);
 
 	const onLogOutClick = () => {
 		const confirmCheck = window.confirm('크위터에서 로그아웃 할까요?');
@@ -166,6 +168,7 @@ const Profile = ({ refreshUser, userObj }) => {
 	};
 
 	const getMyNweets = useCallback(async () => {
+		setLoading(true);
 		const q = query(
 			collection(dbService, 'kweets'),
 			where('creatorId', '==', `${userObj.uid}`),
@@ -181,13 +184,12 @@ const Profile = ({ refreshUser, userObj }) => {
 	}, [userObj.uid]);
 
 	useEffect(() => {
-		let isMounted = true;
 		getMyNweets();
 
 		return () => {
-			isMounted = false;
+			setLoading(false);
 		};
-	}, [getMyNweets]);
+	}, [myKweets, getMyNweets]);
 
 	return (
 		<Wrapper>

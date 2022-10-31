@@ -7,7 +7,7 @@ import styled from 'styled-components';
 
 const Wrapper = styled.main`
 	border-right: 1px solid #efefef;
-	margin: 0 20vw 100px 30vw;
+	margin: 0 20vw 100px 25vw;
 `;
 
 const Title = styled.h1`
@@ -18,9 +18,11 @@ const Title = styled.h1`
 
 const Home = ({ userObj }) => {
 	const [kweets, setKweets] = useState([]);
+	const [loading, setLoading] = useState(false);
 
-	useEffect(() => {
-		let isMounted = true;
+	const getKweets = () => {
+		setLoading(true);
+
 		const q = query(
 			collection(dbService, 'kweets'),
 			orderBy('createdAt', 'desc')
@@ -32,9 +34,12 @@ const Home = ({ userObj }) => {
 			}));
 			setKweets(kweetArray);
 		});
+	};
 
+	useEffect(() => {
+		getKweets();
 		return () => {
-			isMounted = false;
+			setLoading(false);
 		};
 	}, []);
 

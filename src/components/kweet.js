@@ -176,7 +176,7 @@ const Kweet = ({ kweetObj, isOwner }) => {
 		const {
 			target: { value },
 		} = e;
-		setNewKweet(value);
+		setNewKweet(value.trim());
 	};
 
 	useEffect(() => {
