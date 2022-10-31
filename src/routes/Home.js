@@ -5,9 +5,15 @@ import Write from 'components/Write';
 import Kweet from 'components/Kweet';
 import styled from 'styled-components';
 
-const Wrapper = styled.section`
-	margin-top: 50px;
-	margin-left: 30vw;
+const Wrapper = styled.main`
+	border-right: 1px solid #efefef;
+	margin: 0 20vw 100px 30vw;
+`;
+
+const Title = styled.h1`
+	font-size: 22px;
+	font-weight: 800;
+	padding: 20px;
 `;
 
 const Home = ({ userObj }) => {
@@ -29,8 +35,10 @@ const Home = ({ userObj }) => {
 
 	return (
 		<Wrapper>
+			<Title>홈</Title>
+
 			<Write userObj={userObj} />
-			<div>
+			<section>
 				{kweets.map((kweet) => (
 					<Kweet
 						key={kweet.id}
@@ -38,7 +46,7 @@ const Home = ({ userObj }) => {
 						isOwner={kweet.creatorId === userObj.uid}
 					/>
 				))}
-			</div>
+			</section>
 		</Wrapper>
 	);
 };
