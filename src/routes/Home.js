@@ -20,6 +20,7 @@ const Home = ({ userObj }) => {
 	const [kweets, setKweets] = useState([]);
 
 	useEffect(() => {
+		let isMounted = true;
 		const q = query(
 			collection(dbService, 'kweets'),
 			orderBy('createdAt', 'desc')
@@ -31,6 +32,10 @@ const Home = ({ userObj }) => {
 			}));
 			setKweets(kweetArray);
 		});
+
+		return () => {
+			isMounted = false;
+		};
 	}, []);
 
 	return (

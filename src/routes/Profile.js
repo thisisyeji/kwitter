@@ -135,7 +135,6 @@ const Profile = ({ refreshUser, userObj }) => {
 	const [myKweets, setMyKweets] = useState([]);
 	const [newName, setNewName] = useState(userObj.displayName);
 	const [edit, setEdit] = useState(false);
-	const [loading, setLoading] = useState(false);
 
 	const onLogOutClick = () => {
 		const confirmCheck = window.confirm('크위터에서 로그아웃 할까요?');
@@ -182,13 +181,13 @@ const Profile = ({ refreshUser, userObj }) => {
 	}, [userObj.uid]);
 
 	useEffect(() => {
-		setLoading(true);
+		let isMounted = true;
 		getMyNweets();
 
 		return () => {
-			setLoading(false);
+			isMounted = false;
 		};
-	}, [myKweets, getMyNweets]);
+	}, [getMyNweets]);
 
 	return (
 		<Wrapper>

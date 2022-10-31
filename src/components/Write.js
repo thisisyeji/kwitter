@@ -133,13 +133,6 @@ const Write = ({ userObj }) => {
 	const [attachment, setAttachment] = useState('');
 	const fileInput = useRef();
 
-	// let photoURL;
-	// if (!userObj.photoURL) {
-	// 	return (photoURL = process.env.PUBLIC_URL + 'img/default.jpg');
-	// } else {
-	// 	return (photoURL = userObj.photoURL);
-	// }
-
 	const onChange = (e) => {
 		const {
 			target: { value },
@@ -211,7 +204,7 @@ const Write = ({ userObj }) => {
 
 	return (
 		<WriteBox>
-			<UserImg src={userObj.photoURL} alt='userImage' />
+			<UserImg src={userObj?.photoURL} alt='userImage' />
 			<form onSubmit={onSubmit}>
 				<WriteText
 					cols='100'

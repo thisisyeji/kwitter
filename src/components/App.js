@@ -74,7 +74,7 @@ function App() {
 		onAuthStateChanged(authService, (user) => {
 			if (user) {
 				setIsLoggedIn(true);
-				// displayName 받아올 수 있도록 수정
+				// displayName, photoURL 받아오기
 				if (user.displayName === null) {
 					const name = user.email.split('@')[0];
 					user.displayName = name;
@@ -86,16 +86,26 @@ function App() {
 				setUserObj(user);
 			} else {
 				setIsLoggedIn(false);
+				setUserObj(null);
 			}
 			setInit(true);
 		});
-	}, []);
+	}, [userObj]);
+
+	const refreshUser = () => {
+		const user = authService.currentUser;
+		setUserObj({ ...user });
+	};
 
 	return (
 		<>
 			<GlobalStyle />
 			{init ? (
-				<Routers isLoggedIn={isLoggedIn} userObj={userObj} />
+				<Routers
+					isLoggedIn={isLoggedIn}
+					userObj={userObj}
+					refreshUser={refreshUser}
+				/>
 			) : (
 				'Initializing...'
 			)}
