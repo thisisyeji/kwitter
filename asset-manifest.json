@@ -1,0 +1,10 @@
+{
+  "files": {
+    "main.js": "/kwitter/static/js/main.c1946fae.js",
+    "index.html": "/kwitter/index.html",
+    "main.c1946fae.js.map": "/kwitter/static/js/main.c1946fae.js.map"
+  },
+  "entrypoints": [
+    "static/js/main.c1946fae.js"
+  ]
+}
