@@ -138,7 +138,7 @@ const Write = ({ userObj }) => {
 		const {
 			target: { value },
 		} = e;
-		setKweet(value.trim());
+		setKweet(value);
 		setActive(value);
 	};
 
@@ -167,7 +167,7 @@ const Write = ({ userObj }) => {
 		let createdDate = new Date().toLocaleString('ko-KR', options);
 
 		const kweetObj = {
-			text: kweet,
+			text: kweet.trim(),
 			createdAt: Date.now(),
 			createdDate: createdDate,
 			creatorId: userObj.uid,
@@ -177,6 +177,7 @@ const Write = ({ userObj }) => {
 		};
 
 		await addDoc(collection(dbService, 'kweets'), kweetObj);
+
 		setKweet('');
 		setActive('');
 		setAttachment('');

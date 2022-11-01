@@ -17,6 +17,21 @@ const Nav = styled.nav`
 	ul {
 		margin-left: 7vw;
 	}
+
+	@media screen and (max-width: 1000px) {
+		ul {
+			margin-left: 4vw;
+		}
+	}
+
+	@media screen and (max-width: 768px) {
+		width: 60px;
+
+		ul {
+			margin-left: 0;
+			padding: 3px;
+		}
+	}
 `;
 
 const List = styled.li`
@@ -45,6 +60,9 @@ const List = styled.li`
 
 	svg {
 		margin-right: 10px;
+		color: &.logo {
+			color: rgb(29, 155, 240);
+		}
 	}
 
 	span {
@@ -62,6 +80,19 @@ const List = styled.li`
 			color: rgb(29, 155, 240);
 		}
 	}
+
+	@media screen and (max-width: 768px) {
+		color: rgb(15, 20, 25);
+		display: flex;
+		justify-content: center;
+		margin-right: 0;
+		svg {
+			margin-right: 0;
+		}
+		span {
+			display: none;
+		}
+	}
 `;
 
 const Navigation = () => {
@@ -74,13 +105,7 @@ const Navigation = () => {
 			<ul>
 				<List>
 					<NavLink exact to='/' activeStyle={activeStyle}>
-						<FaTwitter
-							style={{
-								color: 'rgb(29, 155, 240)',
-								width: '26px',
-								height: '26px',
-							}}
-						/>
+						<FaTwitter className='logo' />
 						<span>홈</span>
 					</NavLink>
 				</List>

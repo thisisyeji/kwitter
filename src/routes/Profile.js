@@ -12,6 +12,12 @@ const Wrapper = styled.section`
 	border-right: 1px solid #efefef;
 	margin: 0 20vw 0 25vw;
 	margin-top: 50px;
+
+	@media screen and (max-width: 768px) {
+		margin: 0;
+		margin-top: 50px;
+		margin-left: 60px;
+	}
 `;
 
 const TotalKweets = styled.div`
@@ -86,6 +92,28 @@ const UserProfile = styled.div`
 			&:hover {
 				background-color: #efefef;
 				color: rgb(29, 155, 240);
+			}
+		}
+	}
+
+	@media screen and (max-width: 768px) {
+		padding: 30px;
+
+		img {
+			width: 100px;
+			height: 100px;
+		}
+
+		h2 {
+			font-size: 20px;
+		}
+
+		.btns {
+			right: 10px;
+
+			button {
+				font-size: 14px;
+				padding: 10px;
 			}
 		}
 	}

@@ -28,11 +28,21 @@ const UserBox = styled.div`
 		color: #666;
 		padding-top: 10px;
 		display: flex;
+		flex-wrap: wrap;
+
 		gap: 5px;
 
 		p {
 			font-weight: 700;
 			color: #555;
+		}
+	}
+
+	@media screen and (max-width: 430px) {
+		.userInfo {
+			span {
+				margin-bottom: 20px;
+			}
 		}
 	}
 `;
@@ -45,6 +55,10 @@ const KweetImg = styled.img`
 	width: 200px;
 	height: 100%;
 	margin-bottom: 10px;
+
+	@media screen and (max-width: 430px) {
+		width: 150px;
+	}
 `;
 
 const KweetText = styled.div`
@@ -165,7 +179,7 @@ const Kweet = ({ kweetObj, isOwner }) => {
 			if (!newKweet) return alert('수정할 내용을 입력하세요.');
 
 			await updateDoc(kweetTextRef, {
-				text: newKweet,
+				text: newKweet.trim(),
 			});
 			setEditing(false);
 		},
@@ -176,7 +190,7 @@ const Kweet = ({ kweetObj, isOwner }) => {
 		const {
 			target: { value },
 		} = e;
-		setNewKweet(value.trim());
+		setNewKweet(value);
 	};
 
 	useEffect(() => {
@@ -189,11 +203,18 @@ const Kweet = ({ kweetObj, isOwner }) => {
 	return (
 		<KweetBox>
 			<UserBox>
-				<img src={kweetObj.profileImg} alt='userImage' />
+				<img
+					src={
+						kweetObj.profileImg
+							? kweetObj.profileImg
+							: process.env.PUBLIC_URL + 'img/default.jpg'
+					}
+					alt='userImage'
+				/>
 				<div className='userInfo'>
 					<p>{kweetObj.creatorName}</p>
 					&middot;
-					<span>{kweetObj.createdDate}</span>
+					<span className='date'>{kweetObj.createdDate}</span>
 				</div>
 			</UserBox>
 

@@ -7,7 +7,12 @@ import styled from 'styled-components';
 
 const Wrapper = styled.main`
 	border-right: 1px solid #efefef;
-	margin: 0 20vw 100px 25vw;
+	margin: 0 20vw 0 25vw;
+
+	@media screen and (max-width: 768px) {
+		margin: 0;
+		margin-left: 60px;
+	}
 `;
 
 const Title = styled.h1`
