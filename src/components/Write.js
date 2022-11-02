@@ -9,7 +9,7 @@ import styled from 'styled-components';
 
 const WriteBox = styled.section`
 	display: flex;
-	border-bottom: 1px solid #efefef;
+	border-bottom: 1px solid ${(props) => props.theme.border};
 	padding: 20px;
 	padding-top: 0;
 `;
@@ -26,10 +26,11 @@ const WriteText = styled.textarea`
 	max-width: 500px;
 	min-height: 100px;
 	font-size: 20px;
+	background: ${(props) => props.theme.bg};
 	resize: none;
 	outline: none;
 	border: none;
-	border-bottom: 1px solid #efefef;
+	border-bottom: 1px solid ${(props) => props.theme.border};
 	margin-bottom: 20px;
 	padding: 10px;
 `;
@@ -85,7 +86,7 @@ const SubmitInput = styled.input`
 	transition: 0.5s;
 
 	&:disabled {
-		color: none;
+		color: #666;
 		background: none;
 		border: 1px solid #cfcfcf;
 	}
@@ -104,7 +105,7 @@ const SubmitInput = styled.input`
 `;
 
 const AttachmentBox = styled.div`
-	border-bottom: 1px solid #efefef;
+	border-bottom: 1px solid ${(props) => props.theme.border};
 	margin-bottom: 15px;
 	position: relative;
 

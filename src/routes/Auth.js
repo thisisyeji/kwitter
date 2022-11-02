@@ -39,6 +39,7 @@ const AuthWrap = styled.section`
 		justify-content: center;
 
 		h1 {
+			color: ${(props) => props.theme.text};
 			font-size: 4vw;
 			font-weight: 700;
 			margin-bottom: 30px;
@@ -53,6 +54,7 @@ const AuthWrap = styled.section`
 			gap: 10px;
 
 			button {
+				color: ${(props) => props.theme.text};
 				border: 1px solid #efefef;
 				border-radius: 30px;
 				background: none;

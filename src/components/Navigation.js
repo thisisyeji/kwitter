@@ -9,8 +9,7 @@ const Nav = styled.nav`
 	height: 100vh;
 	position: fixed;
 	top: 0;
-	background: #fff;
-	border-right: 1px solid #efefef;
+	border-right: 1px solid ${(props) => props.theme.border};
 	padding-top: 30px;
 	z-index: 3;
 
@@ -37,7 +36,7 @@ const Nav = styled.nav`
 const List = styled.li`
 	font-style: none;
 	font-size: 26px;
-	color: rgb(15, 20, 25);
+	color: ${(props) => props.theme.text};
 	border-radius: 30px;
 	cursor: pointer;
 	margin-right: 20px;
@@ -51,8 +50,7 @@ const List = styled.li`
 
 	a {
 		text-decoration: none;
-		color: rgb(15, 20, 25);
-
+		color: ${(props) => props.theme.text};
 		display: flex;
 		justify-content: center;
 		align-items: center;
@@ -60,9 +58,6 @@ const List = styled.li`
 
 	svg {
 		margin-right: 10px;
-		color: &.logo {
-			color: rgb(29, 155, 240);
-		}
 	}
 
 	span {
@@ -71,7 +66,7 @@ const List = styled.li`
 	}
 
 	&:hover {
-		background-color: #efefef;
+		background-color: rgba(214, 213, 213, 0.2);
 		color: rgb(29, 155, 240);
 		font-weight: 700;
 
@@ -82,10 +77,11 @@ const List = styled.li`
 	}
 
 	@media screen and (max-width: 768px) {
-		color: rgb(15, 20, 25);
+		color: ${(props) => props.theme.text};
 		display: flex;
 		justify-content: center;
 		margin-right: 0;
+
 		svg {
 			margin-right: 0;
 		}

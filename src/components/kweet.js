@@ -8,7 +8,7 @@ import { RiDeleteBinLine, RiEditLine, RiCheckFill } from 'react-icons/ri';
 import { MdClear } from 'react-icons/md';
 
 const KweetBox = styled.article`
-	border-bottom: 1px solid #efefef;
+	border-bottom: 1px solid ${(props) => props.theme.border};
 	padding: 20px;
 `;
 
@@ -33,7 +33,7 @@ const UserBox = styled.div`
 
 		p {
 			font-weight: 700;
-			color: #555;
+			color: ${(props) => props.theme.userName};
 		}
 	}
 
@@ -65,6 +65,7 @@ const KweetText = styled.div`
 	overflow: hidden;
 	word-wrap: break-word;
 	p {
+		color: ${(props) => props.theme.text};
 		height: 100%;
 		line-height: 1.5;
 		margin-bottom: 20px;
@@ -80,6 +81,7 @@ const KweetText = styled.div`
 			width: 30px;
 			height: 30px;
 			font-size: 18px;
+			color: ${(props) => props.theme.text};
 			background: none;
 			border: none;
 			border-radius: 50%;
@@ -91,7 +93,8 @@ const KweetText = styled.div`
 			align-items: center;
 
 			:hover {
-				background: #efefef;
+				background: ${(props) => props.theme.hoverBg};
+
 				border-radius: 50%;
 			}
 		}
@@ -106,15 +109,18 @@ const KweetEdit = styled.div`
 		line-height: 1.5;
 		resize: none;
 		outline: none;
+		color: ${(props) => props.theme.text};
+		background: ${(props) => props.theme.bg};
 		border: 1px solid #999;
 		border-radius: 10px;
-		padding: 5px;
+		padding: 10px;
 		margin-bottom: 20px;
 	}
 
 	label,
 	button {
 		font-size: 18px;
+		color: ${(props) => props.theme.text};
 		position: absolute;
 		right: 40px;
 		bottom: -5px;

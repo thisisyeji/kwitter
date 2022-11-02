@@ -16,6 +16,7 @@ const Wrapper = styled.main`
 `;
 
 const Title = styled.h1`
+	color: ${(props) => props.theme.text};
 	font-size: 22px;
 	font-weight: 800;
 	padding: 20px;

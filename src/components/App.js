@@ -3,6 +3,8 @@ import React, { useState, useEffect } from 'react';
 import { authService } from 'fbase';
 import { onAuthStateChanged } from 'firebase/auth';
 import styled, { createGlobalStyle, ThemeProvider } from 'styled-components';
+import { lightTheme, darkTheme } from 'themes';
+import { MdWbSunny, MdNightlightRound } from 'react-icons/md';
 
 const GlobalStyle = createGlobalStyle`
 	html, body, div, span, applet, object, iframe,
@@ -43,7 +45,7 @@ body {
   line-height: 1;
   width: 100%;
   height: 100vh;
-  background: #fff;
+  background: ${({ theme }) => theme.bg};
 	font-family: 'Josefin Sans', sans-serif;
 }
 menu, ol, ul, li {
@@ -65,7 +67,43 @@ table {
 }
 `;
 
+const ThemeBtn = styled.button`
+	position: fixed;
+	bottom: 30px;
+	left: 10px;
+	z-index: 5;
+
+	color: #777;
+	font-size: 26px;
+	border: none;
+	border-radius: 50%;
+	outline: none;
+	background: none;
+	cursor: pointer;
+	transform: rotate(-45deg);
+	transition: 0.5s;
+
+	&:hover {
+		transform: rotate(-60deg) scale(1.2);
+	}
+`;
+
 function App() {
+	const getDark = () => {
+		const mode = localStorage.getItem('mode');
+		if (mode) {
+			return JSON.parse(mode);
+		} else {
+			return 'light';
+		}
+	};
+	const [theme, setTheme] = useState(getDark());
+	const isDarkMode = theme === 'dark';
+
+	const onDark = () => {
+		setTheme(isDarkMode ? 'light' : 'dark');
+	};
+
 	const [init, setInit] = useState(false);
 	const [isLoggedIn, setIsLoggedIn] = useState(false);
 	const [userObj, setUserObj] = useState(null);
@@ -92,13 +130,17 @@ function App() {
 		});
 	}, [userObj]);
 
+	useEffect(() => {
+		localStorage.setItem('mode', JSON.stringify(theme));
+	}, [theme]);
+
 	const refreshUser = () => {
 		const user = authService.currentUser;
 		setUserObj({ ...user });
 	};
 
 	return (
-		<>
+		<ThemeProvider theme={isDarkMode ? darkTheme : lightTheme}>
 			<GlobalStyle />
 			{init ? (
 				<Routers
@@ -109,8 +151,10 @@ function App() {
 			) : (
 				'Initializing...'
 			)}
-			<footer></footer>
-		</>
+			<ThemeBtn onClick={() => onDark()}>
+				{isDarkMode ? <MdWbSunny /> : <MdNightlightRound />}
+			</ThemeBtn>
+		</ThemeProvider>
 	);
 }
 

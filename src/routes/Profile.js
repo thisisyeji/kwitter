@@ -9,7 +9,7 @@ import styled from 'styled-components';
 import Kweet from '../components/Kweet';
 
 const Wrapper = styled.section`
-	border-right: 1px solid #efefef;
+	border-right: 1px solid ${(props) => props.theme.border};
 	margin: 0 20vw 0 25vw;
 	margin-top: 50px;
 
@@ -25,7 +25,8 @@ const TotalKweets = styled.div`
 	top: 0;
 	width: 100%;
 	height: 50px;
-	background-color: rgba(255, 255, 255, 0.9);
+	color: ${(props) => props.theme.text};
+	background: ${(props) => props.theme.total};
 	z-index: 2;
 	padding-left: 20px;
 
@@ -46,7 +47,7 @@ const TotalKweets = styled.div`
 `;
 
 const UserProfile = styled.div`
-	border-bottom: 1px solid #efefef;
+	border-bottom: 1px solid ${(props) => props.theme.border};
 	padding: 30px 50px;
 
 	position: relative;
@@ -59,13 +60,14 @@ const UserProfile = styled.div`
 	}
 
 	h2 {
+		color: ${(props) => props.theme.userName};
 		font-size: 24px;
 		letter-spacing: 1px;
 		margin-bottom: 20px;
 	}
 
 	p {
-		color: #555;
+		color: #666;
 		margin-left: 10px;
 		margin-bottom: 15px;
 	}
@@ -80,6 +82,7 @@ const UserProfile = styled.div`
 		gap: 10px;
 
 		button {
+			color: ${(props) => props.theme.text};
 			font-size: 16px;
 			font-weight: 700;
 			border: 1px solid #d8d8d8;
@@ -135,6 +138,8 @@ const EditForm = styled.form`
 	input#edit {
 		width: 70%;
 		font-size: 24px;
+		color: ${(props) => props.theme.text};
+		background: ${(props) => props.theme.bg};
 		outline: none;
 		border: none;
 		border-bottom: 2px solid #999;
@@ -145,7 +150,7 @@ const EditForm = styled.form`
 
 	input[type='submit'] {
 		font-weight: 600;
-		background: #333;
+		background: #444;
 		color: #fff;
 		border: none;
 		border-radius: 20px;
