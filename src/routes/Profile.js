@@ -96,7 +96,7 @@ const UserProfile = styled.div`
 		}
 	}
 
-	@media screen and (max-width: 768px) {
+	@media screen and (max-width: 430px) {
 		padding: 30px;
 
 		img {
