@@ -29,7 +29,6 @@ const UserBox = styled.div`
 		padding-top: 10px;
 		display: flex;
 		flex-wrap: wrap;
-
 		gap: 5px;
 
 		p {
@@ -54,7 +53,6 @@ const KweetContent = styled.div`
 const KweetImg = styled.img`
 	width: 200px;
 	height: 100%;
-	margin-bottom: 10px;
 
 	@media screen and (max-width: 430px) {
 		width: 150px;
@@ -69,6 +67,7 @@ const KweetText = styled.div`
 	p {
 		height: 100%;
 		line-height: 1.5;
+		margin-bottom: 20px;
 	}
 
 	.btns {
@@ -207,7 +206,7 @@ const Kweet = ({ kweetObj, isOwner }) => {
 					src={
 						kweetObj.profileImg
 							? kweetObj.profileImg
-							: process.env.PUBLIC_URL + 'img/default.jpg'
+							: process.env.PUBLIC_URL + '/img/default.jpg'
 					}
 					alt='userImage'
 				/>
@@ -219,10 +218,6 @@ const Kweet = ({ kweetObj, isOwner }) => {
 			</UserBox>
 
 			<KweetContent>
-				{kweetObj.attachmentUrl && (
-					<KweetImg src={kweetObj.attachmentUrl} alt='uploaded img' />
-				)}
-
 				{editing ? (
 					<KweetEdit>
 						<form onSubmit={onSubmit}>
@@ -256,6 +251,10 @@ const Kweet = ({ kweetObj, isOwner }) => {
 							</div>
 						)}
 					</KweetText>
+				)}
+
+				{kweetObj.attachmentUrl && (
+					<KweetImg src={kweetObj.attachmentUrl} alt='uploaded img' />
 				)}
 			</KweetContent>
 		</KweetBox>
