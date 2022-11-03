@@ -231,7 +231,7 @@ const Profile = ({ refreshUser, userObj }) => {
 			</TotalKweets>
 
 			<UserProfile>
-				<img src={userObj?.photoURL} alt='userProfileImage' />
+				<img src={userObj?.photoURL} alt='userAvatar' />
 				{edit ? (
 					<EditForm onSubmit={onSubmit}>
 						<label htmlFor='edit'>닉네임</label>

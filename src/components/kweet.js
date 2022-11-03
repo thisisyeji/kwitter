@@ -208,7 +208,7 @@ const Kweet = ({ kweetObj, isOwner }) => {
 	return (
 		<KweetBox>
 			<UserBox>
-				<img src={kweetObj?.profileImg} alt='userImage' />
+				<img src={kweetObj?.profileImg} alt='userAvatar' />
 				<div className='userInfo'>
 					<p>{kweetObj.creatorName}</p>
 					&middot;

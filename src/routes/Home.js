@@ -6,7 +6,7 @@ import Kweet from 'components/Kweet';
 import styled from 'styled-components';
 
 const Wrapper = styled.main`
-	border-right: 1px solid #efefef;
+	border-right: 1px solid ${(props) => props.theme.border};
 	margin: 0 20vw 0 25vw;
 
 	@media screen and (max-width: 768px) {

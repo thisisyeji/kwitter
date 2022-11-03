@@ -124,7 +124,8 @@ function App() {
 					user.displayName = name;
 				}
 				if (user.photoURL === null) {
-					const defaultURL = process.env.PUBLIC_URL + '/img/default.jpg';
+					const defaultURL =
+						'https://abs.twimg.com/sticky/default_profile_images/default_profile_normal.png';
 					user.photoURL = defaultURL;
 				}
 				setUserObj(user);
