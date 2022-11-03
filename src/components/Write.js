@@ -26,6 +26,7 @@ const WriteText = styled.textarea`
 	max-width: 500px;
 	min-height: 100px;
 	font-size: 20px;
+	color: ${(props) => props.theme.text};
 	background: ${(props) => props.theme.bg};
 	resize: none;
 	outline: none;

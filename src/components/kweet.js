@@ -208,14 +208,7 @@ const Kweet = ({ kweetObj, isOwner }) => {
 	return (
 		<KweetBox>
 			<UserBox>
-				<img
-					src={
-						kweetObj.profileImg
-							? kweetObj.profileImg
-							: process.env.PUBLIC_URL + '/img/default.jpg'
-					}
-					alt='userImage'
-				/>
+				<img src={kweetObj?.profileImg} alt='userImage' />
 				<div className='userInfo'>
 					<p>{kweetObj.creatorName}</p>
 					&middot;

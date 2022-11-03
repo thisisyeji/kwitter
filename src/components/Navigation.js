@@ -49,10 +49,11 @@ const List = styled.li`
 	align-items: center;
 
 	a {
+		width: 100%;
 		text-decoration: none;
 		color: ${(props) => props.theme.text};
 		display: flex;
-		justify-content: center;
+		justify-content: flex-start;
 		align-items: center;
 	}
 

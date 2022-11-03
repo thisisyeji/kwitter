@@ -73,15 +73,21 @@ const ThemeBtn = styled.button`
 	left: 10px;
 	z-index: 5;
 
-	color: #777;
+	width: 40px;
+	height: 40px;
+	color: ${({ theme }) => theme.bg};
 	font-size: 26px;
 	border: none;
 	border-radius: 50%;
 	outline: none;
-	background: none;
+	background: rgb(29, 155, 240);
 	cursor: pointer;
 	transform: rotate(-45deg);
 	transition: 0.5s;
+
+	display: flex;
+	justify-content: center;
+	align-items: center;
 
 	&:hover {
 		transform: rotate(-60deg) scale(1.2);
