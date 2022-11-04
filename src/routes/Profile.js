@@ -1,12 +1,15 @@
-import React, { useEffect, useState, useCallback } from 'react';
+import React, { useEffect, useState, useCallback, useRef } from 'react';
 import { signOut } from 'firebase/auth';
-import { authService } from 'fbase';
+import { authService, storageService } from 'fbase';
 import { updateProfile } from 'firebase/auth';
+import { ref, uploadString, getDownloadURL } from 'firebase/storage';
 import { useHistory } from 'react-router-dom';
 import { dbService } from 'fbase';
 import { collection, query, where, orderBy, getDocs } from 'firebase/firestore';
 import styled from 'styled-components';
-import Kweet from '../components/Kweet';
+import Kweet from 'components/Kweet';
+import { TbCameraPlus } from 'react-icons/tb';
+import { TiDelete } from 'react-icons/ti';
 
 const Wrapper = styled.section`
 	border-right: 1px solid ${(props) => props.theme.border};
@@ -122,12 +125,14 @@ const UserProfile = styled.div`
 	}
 `;
 
-const EditForm = styled.form`
+const EditProfile = styled.article`
 	max-width: 500px;
-	border: 1px solid #e4e4e4;
+	border: 1px solid #000;
 	border-radius: 10px;
 	padding: 20px;
+`;
 
+const EditForm = styled.form`
 	label {
 		font-size: 14px;
 		color: #888;
@@ -164,12 +169,81 @@ const EditForm = styled.form`
 	}
 `;
 
+const Avatar = styled.div`
+	display: flex;
+	flex-wrap: wrap;
+
+	.title {
+		width: 100%;
+		font-size: 14px;
+		color: #888;
+		margin: 0;
+		margin-bottom: 10px;
+	}
+`;
+
+const AvatarBtn = styled.div`
+	width: 50px;
+	height: 50px;
+	background: #999;
+	border-radius: 50%;
+	margin-right: 20px;
+	margin-bottom: 20px;
+
+	display: flex;
+	justify-content: center;
+	align-items: center;
+
+	label {
+		font-size: 40px;
+		color: #fff;
+		cursor: pointer;
+
+		display: flex;
+		justify-content: center;
+		align-items: center;
+	}
+
+	input {
+		width: 1px;
+		height: 1px;
+		position: absolute;
+		top: -9999px;
+		left: -9999px;
+	}
+`;
+
+const NewImg = styled.div`
+	width: 50px;
+	height: 50px;
+	position: relative;
+
+	img {
+		width: 100%;
+		height: 100%;
+	}
+
+	button {
+		position: absolute;
+		top: -10px;
+		right: -15px;
+		background: none;
+		border: none;
+		color: #888;
+		font-size: 22px;
+		cursor: pointer;
+	}
+`;
+
 const Profile = ({ refreshUser, userObj }) => {
 	const history = useHistory();
 	const [myKweets, setMyKweets] = useState([]);
 	const [newName, setNewName] = useState(userObj.displayName);
 	const [edit, setEdit] = useState(false);
+
 	const [loading, setLoading] = useState(false);
+	const [newAvatar, setNewAvatar] = useState(userObj.photoURL);
+	const avatarInput = useRef();
 
 	const onLogOutClick = () => {
 		const confirmCheck = window.confirm('크위터에서 로그아웃 할까요?');
@@ -181,12 +255,20 @@ const Profile = ({ refreshUser, userObj }) => {
 
 	const onSubmit = async (e) => {
 		e.preventDefault();
-		if (userObj.displayName !== newName) {
+		let photoURL = userObj.photoURL;
+		if (photoURL !== newAvatar) {
+			const photoRef = ref(storageService, `${userObj.uid}/profile/photo`);
+			const response = await uploadString(photoRef, newAvatar, 'data_url');
+			photoURL = await getDownloadURL(response.ref);
+		}
+		if (userObj.displayName !== newName || userObj.photoURL !== newAvatar) {
 			if (!newName) return alert('닉네임을 수정하세요.');
 
 			await updateProfile(authService.currentUser, {
 				displayName: newName,
+				photoURL,
 			});
+			setNewAvatar(photoURL);
 			refreshUser();
 		}
 		setEdit(false);
@@ -198,6 +280,22 @@ const Profile = ({ refreshUser, userObj }) => {
 		} = e;
 
 		setNewName(value);
+	};
+
+	const onFileChange = (e) => {
+		const {
+			target: { files },
+		} = e;
+
+		const theFile = files[0];
+		const reader = new FileReader();
+		reader.onloadend = (finishedEvent) => {
+			const {
+				currentTarget: { result },
+			} = finishedEvent;
+			setNewAvatar(result);
+		};
+		reader.readAsDataURL(theFile);
 	};
 
 	const getMyNweets = useCallback(async () => {
@@ -216,6 +314,11 @@ const Profile = ({ refreshUser, userObj }) => {
 		setMyKweets(kweetArray);
 	}, [userObj.uid]);
 
+	const onClearAvatar = () => {
+		setNewAvatar(userObj.photoURL);
+		avatarInput.current.value = '';
+	};
+
 	useEffect(() => {
 		getMyNweets();
 
@@ -233,18 +336,44 @@ const Profile = ({ refreshUser, userObj }) => {
 			<UserProfile>
 				<img src={userObj?.photoURL} alt='userAvatar' />
 				{edit ? (
-					<EditForm onSubmit={onSubmit}>
-						<label htmlFor='edit'>닉네임</label>
-						<input
-							id='edit'
-							type='text'
-							placeholder={userObj.displayName}
-							value={newName}
-							onChange={onChange}
-						/>
+					<EditProfile>
+						<Avatar>
+							<p className='title'>프로필</p>
 
-						<input type='submit' value='저장' />
-					</EditForm>
+							<AvatarBtn>
+								<label htmlFor='newAvatar'>
+									<TbCameraPlus />
+								</label>
+								<input
+									type='file'
+									id='newAvatar'
+									accept='image/*'
+									onChange={onFileChange}
+								/>
+							</AvatarBtn>
+
+							<NewImg>
+								<img src={newAvatar} alt='newAvatar' />
+								<button onClick={onClearAvatar}>
+									<TiDelete />
+								</button>
+							</NewImg>
+						</Avatar>
+
+						<EditForm onSubmit={onSubmit}>
+							<label htmlFor='edit'>닉네임</label>
+							<input
+								id='edit'
+								type='text'
+								placeholder={userObj.displayName}
+								value={newName}
+								onChange={onChange}
+								ref={avatarInput}
+							/>
+
+							<input type='submit' value='저장' />
+						</EditForm>
+					</EditProfile>
 				) : (
 					<>
 						<h2>@{newName}</h2>
