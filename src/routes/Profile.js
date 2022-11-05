@@ -337,14 +337,15 @@ const Profile = ({ refreshUser, userObj }) => {
 			where('creatorId', '==', `${userObj.uid}`),
 			orderBy('createdAt', 'desc')
 		);
+		if (q) {
+			const querySnapshot = await getDocs(q);
+			const kweetArray = querySnapshot.docs.map((doc) => ({
+				id: doc.id,
+				...doc.data(),
+			}));
 
-		const querySnapshot = await getDocs(q);
-		const kweetArray = querySnapshot.docs.map((doc) => ({
-			id: doc.id,
-			...doc.data(),
-		}));
-
-		setMyKweets(kweetArray);
+			setMyKweets(kweetArray);
+		}
 	}, [userObj.uid]);
 
 	const onClearAvatar = () => {
@@ -356,7 +357,7 @@ const Profile = ({ refreshUser, userObj }) => {
 		return () => {
 			setLoading(false);
 		};
-	}, [!edit]);
+	}, [!edit, myKweets]);
 
 	return (
 		<Wrapper>
