@@ -172,7 +172,7 @@ const Text = styled.div`
 	}
 
 	input {
-		width: 60%;
+		width: 70%;
 		font-size: 20px;
 		color: ${(props) => props.theme.text};
 		background: ${(props) => props.theme.bg};
@@ -182,6 +182,13 @@ const Text = styled.div`
 		margin-bottom: 15px;
 		margin-right: 10px;
 		padding: 5px 10px;
+	}
+
+	@media screen and (max-width: 768px) {
+		input {
+			width: 90%;
+			font-size: 16px;
+		}
 	}
 `;
 
