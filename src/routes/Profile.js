@@ -1,11 +1,18 @@
 import React, { useEffect, useState, useCallback, useRef } from 'react';
 import { signOut } from 'firebase/auth';
-import { authService, storageService } from 'fbase';
+import { dbService, authService, storageService } from 'fbase';
 import { updateProfile } from 'firebase/auth';
 import { ref, uploadString, getDownloadURL } from 'firebase/storage';
 import { useHistory } from 'react-router-dom';
-import { dbService } from 'fbase';
-import { collection, query, where, orderBy, getDocs } from 'firebase/firestore';
+import {
+	collection,
+	query,
+	where,
+	orderBy,
+	getDocs,
+	doc,
+	updateDoc,
+} from 'firebase/firestore';
 import styled from 'styled-components';
 import Kweet from 'components/Kweet';
 import { TbCameraPlus } from 'react-icons/tb';
@@ -240,7 +247,6 @@ const Profile = ({ refreshUser, userObj }) => {
 	const [myKweets, setMyKweets] = useState([]);
 	const [newName, setNewName] = useState(userObj.displayName);
 	const [edit, setEdit] = useState(false);
-
 	const [loading, setLoading] = useState(false);
 	const [newAvatar, setNewAvatar] = useState(userObj.photoURL);
 	const avatarInput = useRef();
@@ -271,6 +277,7 @@ const Profile = ({ refreshUser, userObj }) => {
 			setNewAvatar(photoURL);
 			refreshUser();
 		}
+
 		setEdit(false);
 	};
 
@@ -298,7 +305,7 @@ const Profile = ({ refreshUser, userObj }) => {
 		reader.readAsDataURL(theFile);
 	};
 
-	const getMyNweets = useCallback(async () => {
+	const getMyKweets = useCallback(async () => {
 		setLoading(true);
 		const q = query(
 			collection(dbService, 'kweets'),
@@ -318,14 +325,12 @@ const Profile = ({ refreshUser, userObj }) => {
 		setNewAvatar(userObj.photoURL);
 		avatarInput.current.value = '';
 	};
-
 	useEffect(() => {
-		getMyNweets();
-
+		getMyKweets();
 		return () => {
 			setLoading(false);
 		};
-	}, [myKweets, getMyNweets]);
+	}, [!edit]);
 
 	return (
 		<Wrapper>
@@ -395,6 +400,8 @@ const Profile = ({ refreshUser, userObj }) => {
 							key={kweet.id}
 							kweetObj={kweet}
 							isOwner={kweet.creatorId === userObj.uid}
+							newName={newName}
+							newAvatar={newAvatar}
 						/>
 					))}
 			</>

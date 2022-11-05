@@ -158,7 +158,7 @@ const KweetEdit = styled.div`
 	}
 `;
 
-const Kweet = ({ kweetObj, isOwner }) => {
+const Kweet = ({ kweetObj, isOwner, newName, newAvatar }) => {
 	const [editing, setEditing] = useState(false);
 	const [newKweet, setNewKweet] = useState(kweetObj.text);
 
@@ -198,12 +198,25 @@ const Kweet = ({ kweetObj, isOwner }) => {
 		setNewKweet(value);
 	};
 
+	const profileUpdate = useCallback(async () => {
+		if (newName || newAvatar) {
+			await updateDoc(kweetTextRef, {
+				creatorName: newName,
+				profileImg: newAvatar,
+			});
+		}
+	}, [kweetTextRef, newName, newAvatar]);
+
 	useEffect(() => {
 		let isMounted = true;
 		return () => {
 			isMounted = false;
 		};
 	}, []);
+
+	useEffect(() => {
+		profileUpdate();
+	}, [newName, newAvatar, profileUpdate]);
 
 	return (
 		<KweetBox>
