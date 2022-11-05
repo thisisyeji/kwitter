@@ -4,15 +4,7 @@ import { dbService, authService, storageService } from 'fbase';
 import { updateProfile } from 'firebase/auth';
 import { ref, uploadString, getDownloadURL } from 'firebase/storage';
 import { useHistory } from 'react-router-dom';
-import {
-	collection,
-	query,
-	where,
-	orderBy,
-	getDocs,
-	doc,
-	updateDoc,
-} from 'firebase/firestore';
+import { collection, query, where, orderBy, getDocs } from 'firebase/firestore';
 import styled from 'styled-components';
 import Kweet from 'components/Kweet';
 import { TbCameraPlus } from 'react-icons/tb';
@@ -30,7 +22,7 @@ const Wrapper = styled.section`
 	}
 `;
 
-const TotalKweets = styled.div`
+const TotalKweets = styled.article`
 	position: fixed;
 	top: 0;
 	width: 100%;
@@ -56,7 +48,7 @@ const TotalKweets = styled.div`
 	}
 `;
 
-const UserProfile = styled.div`
+const UserProfile = styled.article`
 	border-bottom: 1px solid ${(props) => props.theme.border};
 	padding: 30px 50px;
 
@@ -80,6 +72,11 @@ const UserProfile = styled.div`
 		color: #666;
 		margin-left: 10px;
 		margin-bottom: 15px;
+	}
+
+	.bio {
+		margin-bottom: 50px;
+		font-weight: 600;
 	}
 
 	.btns {
@@ -132,37 +129,27 @@ const UserProfile = styled.div`
 	}
 `;
 
-const EditProfile = styled.article`
+const EditForm = styled.form`
+	position: relative;
 	max-width: 500px;
-	border: 1px solid #000;
+	border: 1px solid #999;
 	border-radius: 10px;
 	padding: 20px;
-`;
 
-const EditForm = styled.form`
-	label {
-		font-size: 14px;
-		color: #888;
-		display: block;
-		margin-bottom: 10px;
-	}
-
-	input#edit {
-		width: 70%;
-		font-size: 24px;
+	.title {
+		font-size: 20px;
+		font-weight: 700;
 		color: ${(props) => props.theme.text};
-		background: ${(props) => props.theme.bg};
-		outline: none;
-		border: none;
-		border-bottom: 2px solid #999;
-		margin-bottom: 15px;
-		margin-right: 10px;
-		padding: 5px 10px;
 	}
 
 	input[type='submit'] {
+		position: absolute;
+		top: 20px;
+		right: 20px;
+		width: 80px;
+		height: 40px;
 		font-weight: 600;
-		background: #444;
+		background: #999;
 		color: #fff;
 		border: none;
 		border-radius: 20px;
@@ -173,6 +160,28 @@ const EditForm = styled.form`
 		&:hover {
 			background: rgb(29, 155, 240);
 		}
+	}
+`;
+
+const Text = styled.div`
+	label {
+		font-size: 14px;
+		color: #888;
+		display: block;
+		margin-bottom: 10px;
+	}
+
+	input {
+		width: 60%;
+		font-size: 20px;
+		color: ${(props) => props.theme.text};
+		background: ${(props) => props.theme.bg};
+		outline: none;
+		border: none;
+		border-bottom: 2px solid #999;
+		margin-bottom: 15px;
+		margin-right: 10px;
+		padding: 5px 10px;
 	}
 `;
 
@@ -187,58 +196,59 @@ const Avatar = styled.div`
 		margin: 0;
 		margin-bottom: 10px;
 	}
-`;
 
-const AvatarBtn = styled.div`
-	width: 50px;
-	height: 50px;
-	background: #999;
-	border-radius: 50%;
-	margin-right: 20px;
-	margin-bottom: 20px;
-
-	display: flex;
-	justify-content: center;
-	align-items: center;
-
-	label {
-		font-size: 40px;
-		color: #fff;
-		cursor: pointer;
+	.btn {
+		width: 50px;
+		height: 50px;
+		background: #999;
+		border-radius: 50%;
+		margin-right: 20px;
+		margin-bottom: 20px;
 
 		display: flex;
 		justify-content: center;
 		align-items: center;
+
+		label {
+			font-size: 35px;
+			color: #fff;
+			cursor: pointer;
+			margin: 0;
+
+			display: flex;
+			justify-content: center;
+			align-items: center;
+		}
+
+		input {
+			width: 1px;
+			height: 1px;
+			position: absolute;
+			top: -9999px;
+			left: -9999px;
+		}
 	}
 
-	input {
-		width: 1px;
-		height: 1px;
-		position: absolute;
-		top: -9999px;
-		left: -9999px;
-	}
-`;
+	.newImg {
+		width: 50px;
+		height: 50px;
+		position: relative;
 
-const NewImg = styled.div`
-	width: 50px;
-	height: 50px;
-	position: relative;
+		img {
+			width: 100%;
+			height: 100%;
+		}
 
-	img {
-		width: 100%;
-		height: 100%;
-	}
-
-	button {
-		position: absolute;
-		top: -10px;
-		right: -15px;
-		background: none;
-		border: none;
-		color: #888;
-		font-size: 22px;
-		cursor: pointer;
+		button {
+			position: absolute;
+			top: -10px;
+			right: -15px;
+			background: none;
+			border: none;
+			color: #888;
+			font-size: 22px;
+			cursor: pointer;
+		}
 	}
 `;
 
@@ -249,6 +259,7 @@ const Profile = ({ refreshUser, userObj }) => {
 	const [edit, setEdit] = useState(false);
 	const [loading, setLoading] = useState(false);
 	const [newAvatar, setNewAvatar] = useState(userObj.photoURL);
+	const [myBio, setMyBio] = useState('');
 	const avatarInput = useRef();
 
 	const onLogOutClick = () => {
@@ -259,14 +270,27 @@ const Profile = ({ refreshUser, userObj }) => {
 		}
 	};
 
+	const onChange = (e) => {
+		const {
+			target: { name, value },
+		} = e;
+		if (name === 'userName') {
+			setNewName(value);
+		} else if (name === 'userBio') {
+			setMyBio(value);
+		}
+	};
+
 	const onSubmit = async (e) => {
 		e.preventDefault();
+
 		let photoURL = userObj.photoURL;
 		if (photoURL !== newAvatar) {
 			const photoRef = ref(storageService, `${userObj.uid}/profile/photo`);
 			const response = await uploadString(photoRef, newAvatar, 'data_url');
 			photoURL = await getDownloadURL(response.ref);
 		}
+
 		if (userObj.displayName !== newName || userObj.photoURL !== newAvatar) {
 			if (!newName) return alert('닉네임을 수정하세요.');
 
@@ -274,19 +298,12 @@ const Profile = ({ refreshUser, userObj }) => {
 				displayName: newName,
 				photoURL,
 			});
+
 			setNewAvatar(photoURL);
 			refreshUser();
 		}
 
 		setEdit(false);
-	};
-
-	const onChange = (e) => {
-		const {
-			target: { value },
-		} = e;
-
-		setNewName(value);
 	};
 
 	const onFileChange = (e) => {
@@ -307,6 +324,7 @@ const Profile = ({ refreshUser, userObj }) => {
 
 	const getMyKweets = useCallback(async () => {
 		setLoading(true);
+
 		const q = query(
 			collection(dbService, 'kweets'),
 			where('creatorId', '==', `${userObj.uid}`),
@@ -318,6 +336,7 @@ const Profile = ({ refreshUser, userObj }) => {
 			id: doc.id,
 			...doc.data(),
 		}));
+
 		setMyKweets(kweetArray);
 	}, [userObj.uid]);
 
@@ -341,11 +360,10 @@ const Profile = ({ refreshUser, userObj }) => {
 			<UserProfile>
 				<img src={userObj?.photoURL} alt='userAvatar' />
 				{edit ? (
-					<EditProfile>
+					<EditForm onSubmit={onSubmit}>
+						<p className='title'>프로필</p>
 						<Avatar>
-							<p className='title'>프로필</p>
-
-							<AvatarBtn>
+							<div className='btn'>
 								<label htmlFor='newAvatar'>
 									<TbCameraPlus />
 								</label>
@@ -355,34 +373,49 @@ const Profile = ({ refreshUser, userObj }) => {
 									accept='image/*'
 									onChange={onFileChange}
 								/>
-							</AvatarBtn>
+							</div>
 
-							<NewImg>
+							<div className='newImg'>
 								<img src={newAvatar} alt='newAvatar' />
 								<button onClick={onClearAvatar}>
 									<TiDelete />
 								</button>
-							</NewImg>
+							</div>
 						</Avatar>
 
-						<EditForm onSubmit={onSubmit}>
-							<label htmlFor='edit'>닉네임</label>
+						<Text>
+							<label htmlFor='userName'>닉네임</label>
 							<input
-								id='edit'
+								id='userName'
+								name='userName'
 								type='text'
 								placeholder={userObj.displayName}
 								value={newName}
 								onChange={onChange}
 								ref={avatarInput}
+								maxLength={15}
 							/>
+							{/*  
+							<label htmlFor='userBio'>바이오</label>
+							<input
+								id='userBio'
+								name='userBio'
+								type='text'
+								placeholder={myBio}
+								value={myBio}
+								onChange={onChange}
+								maxLength={50}
+							/>
+							*/}
+						</Text>
 
-							<input type='submit' value='저장' />
-						</EditForm>
-					</EditProfile>
+						<input type='submit' value='저장' />
+					</EditForm>
 				) : (
 					<>
 						<h2>@{newName}</h2>
-						<p>{userObj.email}</p>
+						<p className='email'>{userObj.email}</p>
+						{/* <p className='bio'>{myBio}</p> */}
 						<p>
 							<strong>{myKweets.length}</strong> 크윗
 						</p>
