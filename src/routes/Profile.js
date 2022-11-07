@@ -4,7 +4,14 @@ import { dbService, authService, storageService } from 'fbase';
 import { updateProfile } from 'firebase/auth';
 import { ref, uploadString, getDownloadURL } from 'firebase/storage';
 import { useHistory } from 'react-router-dom';
-import { collection, query, where, orderBy, getDocs } from 'firebase/firestore';
+import {
+	collection,
+	query,
+	where,
+	orderBy,
+	onSnapshot,
+	getDocs,
+} from 'firebase/firestore';
 import styled from 'styled-components';
 import Kweet from 'components/Kweet';
 import { TbCameraPlus } from 'react-icons/tb';
@@ -65,13 +72,19 @@ const UserProfile = styled.article`
 		color: ${(props) => props.theme.userName};
 		font-size: 24px;
 		letter-spacing: 1px;
-		margin-bottom: 20px;
+		margin-left: 20px;
+		margin-bottom: 10px;
 	}
 
 	p {
 		color: #666;
-		margin-left: 10px;
+		margin-left: 20px;
 		margin-bottom: 15px;
+	}
+
+	p.email {
+		font-size: 20px;
+		margin-bottom: 30px;
 	}
 
 	.bio {
@@ -266,7 +279,8 @@ const Profile = ({ refreshUser, userObj }) => {
 	const [edit, setEdit] = useState(false);
 	const [loading, setLoading] = useState(false);
 	const [newAvatar, setNewAvatar] = useState(userObj.photoURL);
-	const [myBio, setMyBio] = useState('');
+	const [profile, setProfile] = useState();
+	// const [myBio, setMyBio] = useState('');
 	const avatarInput = useRef();
 
 	const onLogOutClick = () => {
@@ -283,9 +297,10 @@ const Profile = ({ refreshUser, userObj }) => {
 		} = e;
 		if (name === 'userName') {
 			setNewName(value);
-		} else if (name === 'userBio') {
-			setMyBio(value);
 		}
+		// else if (name === 'userBio') {
+		// 	setMyBio(value);
+		// }
 	};
 
 	const onSubmit = async (e) => {
@@ -306,7 +321,14 @@ const Profile = ({ refreshUser, userObj }) => {
 				photoURL,
 			});
 
+			let profileInfo = {
+				creatorName: newName,
+				profileImg: newAvatar,
+			};
+
 			setNewAvatar(photoURL);
+			setProfile(profileInfo);
+			// console.log(profile);
 			refreshUser();
 		}
 
@@ -337,27 +359,35 @@ const Profile = ({ refreshUser, userObj }) => {
 			where('creatorId', '==', `${userObj.uid}`),
 			orderBy('createdAt', 'desc')
 		);
-		if (q) {
-			const querySnapshot = await getDocs(q);
-			const kweetArray = querySnapshot.docs.map((doc) => ({
+		onSnapshot(q, (snapshot) => {
+			const kweetArray = snapshot.docs.map((doc) => ({
 				id: doc.id,
 				...doc.data(),
 			}));
-
 			setMyKweets(kweetArray);
-		}
+		});
+		// if (q) {
+		// 	const querySnapshot = await getDocs(q);
+		// 	const kweetArray = querySnapshot.docs.map((doc) => ({
+		// 		id: doc.id,
+		// 		...doc.data(),
+		// 	}));
+
+		// 	setMyKweets(kweetArray);
+		// }
 	}, [userObj.uid]);
 
 	const onClearAvatar = () => {
 		setNewAvatar(userObj.photoURL);
 		avatarInput.current.value = '';
 	};
+
 	useEffect(() => {
 		getMyKweets();
 		return () => {
 			setLoading(false);
 		};
-	}, [!edit, myKweets]);
+	}, []);
 
 	return (
 		<Wrapper>
@@ -421,8 +451,8 @@ const Profile = ({ refreshUser, userObj }) => {
 					</EditForm>
 				) : (
 					<>
-						<h2>@{newName}</h2>
-						<p className='email'>{userObj.email}</p>
+						<h2>{newName}</h2>
+						<p className='email'>@{userObj.email.split('@')[0]}</p>
 						{/* <p className='bio'>{myBio}</p> */}
 						<p>
 							<strong>{myKweets.length}</strong> 크윗
@@ -441,8 +471,8 @@ const Profile = ({ refreshUser, userObj }) => {
 							key={kweet.id}
 							kweetObj={kweet}
 							isOwner={kweet.creatorId === userObj.uid}
-							newName={newName}
-							newAvatar={newAvatar}
+							newAvatar={profile?.profileImg}
+							newName={profile?.creatorName}
 						/>
 					))}
 			</>

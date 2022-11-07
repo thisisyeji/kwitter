@@ -24,7 +24,7 @@ Firebase, React JS를 활용하여 제작한 개인 포트폴리오용 트위터
 
 ### Screenshot
 
-![](./screenshot.jpg)
+![](./screenshot.gif)
 
 ### Links
 

@@ -198,15 +198,6 @@ const Kweet = ({ kweetObj, isOwner, newName, newAvatar }) => {
 		setNewKweet(value);
 	};
 
-	const profileUpdate = useCallback(async () => {
-		if (newName || newAvatar) {
-			await updateDoc(kweetTextRef, {
-				creatorName: newName,
-				profileImg: newAvatar,
-			});
-		}
-	}, [kweetTextRef, newName, newAvatar]);
-
 	useEffect(() => {
 		let isMounted = true;
 		return () => {
@@ -215,8 +206,12 @@ const Kweet = ({ kweetObj, isOwner, newName, newAvatar }) => {
 	}, []);
 
 	useEffect(() => {
-		profileUpdate();
-	}, [newName, newAvatar, profileUpdate]);
+		updateDoc(kweetTextRef, {
+			creatorName: newName ? newName : kweetObj?.creatorName,
+			profileImg: newAvatar ? newAvatar : kweetObj?.profileImg,
+			text: newKweet ? newKweet.trim() : kweetObj?.text,
+		});
+	}, [newName, newAvatar, kweetTextRef]);
 
 	return (
 		<KweetBox>
