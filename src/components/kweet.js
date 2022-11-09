@@ -211,7 +211,7 @@ const Kweet = ({ kweetObj, isOwner, newName, newAvatar }) => {
 			profileImg: newAvatar ? newAvatar : kweetObj?.profileImg,
 			text: newKweet ? newKweet.trim() : kweetObj?.text,
 		});
-	}, [newName, newAvatar, kweetTextRef]);
+	}, [kweetTextRef]);
 
 	return (
 		<KweetBox>

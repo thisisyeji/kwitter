@@ -10,7 +10,7 @@ import {
 	where,
 	orderBy,
 	onSnapshot,
-	getDocs,
+	// getDocs,
 } from 'firebase/firestore';
 import styled from 'styled-components';
 import Kweet from 'components/Kweet';
